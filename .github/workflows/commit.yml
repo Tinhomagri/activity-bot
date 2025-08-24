@@ -1,0 +1,29 @@
+name: Activity Commit
+
+on:
+  schedule:
+    - cron: "0 9 * * *"
+    - cron: "0 11 * * *"
+    - cron: "0 13 * * *"
+    - cron: "0 15 * * *"
+    - cron: "0 17 * * *"
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Git
+        run: |
+          git config user.name "Tinhomagri"
+          git config user.email "wellingtonfelipemagri44@gmail.com"
+
+      - name: Daily Commit
+        run: |
+          echo "Atividade em $(date)" >> activity.log
+          git add activity.log
+          git commit -m "Commit automático: $(date)" || echo "Nada para commitar"
+          git push
