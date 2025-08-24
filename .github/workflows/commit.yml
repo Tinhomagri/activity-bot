@@ -16,14 +16,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Git
-        run: |
-          git config user.name "Tinhomagri"
-          git config user.email "wellingtonfelipemagri44@gmail.com"
-
       - name: Daily Commit
         run: |
-          echo "Atividade em $(date)" >> activity.log
-          git add activity.log
-          git commit -m "Commit automático: $(date)" || echo "Nada para commitar"
-          git push
+            git config user.name "GitHub Actions"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            echo "Atividade em $(date)" >> activity.log
+            git add activity.log
+            git commit -m "Commit automático: $(date)" || echo "Nada para commitar"
+            git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
