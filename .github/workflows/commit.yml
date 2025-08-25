@@ -5,9 +5,7 @@ name: Activity Commit
 
 on:
   schedule:
-    - cron: "0 9 * * *"
     - cron: "0 11 * * *"
-    - cron: "0 13 * * *"
     - cron: "0 15 * * *"
     - cron: "0 17 * * *"
   workflow_dispatch:
