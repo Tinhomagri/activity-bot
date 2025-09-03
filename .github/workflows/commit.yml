@@ -1,4 +1,3 @@
-
 permissions:
   contents: write
 name: Activity Commit
@@ -18,14 +17,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Ensure activity.log exists
+        run: |
+          touch activity.log
+
       - name: Daily Commit
         run: |
-              git config user.name "GitHub Actions"
-              git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-              echo "Atividade em $(date)" >> activity.log
-              git add activity.log
-              git diff-index --quiet HEAD || git commit -m "Commit automático: $(date)"
-              git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-              git push origin HEAD:main
-    env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          git config user.name "GitHub Actions"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          echo "Atividade em $(date)" >> activity.log
+          git add activity.log
+          if ! git diff --cached --quiet; then
+            git commit -m "Commit automático: $(date)"
+            git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+            git push origin HEAD:main
+          else
+            echo "Nenhuma alteração para commitar."
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
