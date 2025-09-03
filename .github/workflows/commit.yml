@@ -16,21 +16,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0              
+          ref: main                   
 
       - name: Ensure activity.log exists
-        run: |
-          touch activity.log
+        run: touch activity.log
 
       - name: Daily Commit
         run: |
-          git config user.name "GitHub Actions"
+          git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           echo "Atividade em $(date)" >> activity.log
           git add activity.log
           if ! git diff --cached --quiet; then
             git commit -m "Commit automático: $(date)"
-            git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-            git push origin HEAD:main
+            git push origin main
           else
             echo "Nenhuma alteração para commitar."
           fi
